@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results</title>
+</head>
+<body>
+    <h1>Results</h1>
+
+    <h2>Bar Chart: Number of Requests by Type</h2>
+    <img src="{{ bar }}" alt="Bar Chart">
+    
+    <h2>Heatmap: Association Rules</h2>
+    <img src="{{ hmap}}" alt="Heatmap">
+    
+    <h2>K-Means Clusters for Different Request Types</h2>
+    <img src="{{ kmean }}" alt="K-Means Clusters">
+    
+
+
+    <h2>Decision Tree Results</h2>
+    <p>Accuracy: {{ accuracy }}</p>
+
+    <h3>Classification Report:</h3>
+    <table border="1">
+        <tr>
+            <th>Request Type</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1-Score</th>
+            <th>Support</th>
+        </tr>
+        {% for line in classification_report.split('\n')[2:-5] %}
+            {% set values = line.split() %}
+            <tr>
+                <td>{{ values[0] }}</td>
+                <td>{{ values[1] }}</td>
+                <td>{{ values[2] }}</td>
+                <td>{{ values[3] }}</td>
+                <td>{{ values[4] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Confusion Matrix:</h3>
+    <table border="1">
+        {% for row in confusion_matrix %}
+            <tr>
+                {% for cell in row %}
+                    <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    <img src="{{decision_tree_classification_report_img}}" alt="Decision Tree Classification Report">
+    <img src="{{decision_tree_confusion_matrix_img}}" alt="Decision Tree Confusion Matrix">
+
+
+    <h2>KNN Results</h2>
+    <p>Accuracy: {{ knn_accuracy }}</p>
+    <p>Classification Report:</p>
+    <table border="1">
+        <tr>
+            <th>Request Type</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1-Score</th>
+            <th>Support</th>
+        </tr>
+        {% for line in knn_classification_report.split('\n')[2:-5] %}
+            {% set values = line.split() %}
+            <tr>
+                <td>{{ values[0] }}</td>
+                <td>{{ values[1] }}</td>
+                <td>{{ values[2] }}</td>
+                <td>{{ values[3] }}</td>
+                <td>{{ values[4] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+<p>Confusion Matrix:</p>
+<table border="1">
+    {% for row in knn_confusion_matrix %}
+        <tr>
+            {% for cell in row %}
+                <td>{{ cell }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+    <img src="{{ knn_classification_report_img }}" alt="KNN Classification Report">
+    <p>Confusion Matrix: <br>{{ knn_confusion_matrix }}</p>
+    <img src="{{ knn_confusion_matrix_img }}" alt="KNN Confusion Matrix">
+
+    <h2>Isolation Forest Anomaly Detection Results</h2>
+    <img src="{{isolation_forest_img}}" alt="Isolation Forest Anomaly Detection">
+    <p>Download the anomaly detection results <a href="{{ url_for('static', filename='anomaly_predictions.csv') }}">here</a></p>
+
+    <h2>Download Visualization Report</h2>
+    <form action="/download_report" method="get">
+        
+        <button type="submit" >DOWNLOAD REPORT</button>
+    </form>
+</body>
+</html>
